@@ -26,8 +26,8 @@ app.use((req, res, next) => {
 // CORS configuration - restrict in production for security
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, etc.) in development
-    if (!origin && process.env.NODE_ENV !== 'production') {
+    // Allow requests with no origin (direct browser access, mobile apps, Postman, etc.)
+    if (!origin) {
       return callback(null, true);
     }
     
@@ -36,19 +36,24 @@ const corsOptions = {
       const allowedOrigins = [
         process.env.ALLOWED_ORIGIN, // Set this in App Platform: https://your-app-name.ondigitalocean.app
         // Allow DigitalOcean App Platform domains (wildcard pattern)
-        /^https:\/\/.*\.ondigitalocean\.app$/
+        /^https:\/\/.*\.ondigitalocean\.app$/,
+        /^https:\/\/.*\.ondigitalocean\.app\/?$/
       ].filter(Boolean);
       
-      if (allowedOrigins.some(allowed => {
+      const isAllowed = allowedOrigins.some(allowed => {
         if (typeof allowed === 'string') {
           return origin === allowed;
         } else if (allowed instanceof RegExp) {
           return allowed.test(origin);
         }
         return false;
-      })) {
+      });
+      
+      if (isAllowed) {
         callback(null, true);
       } else {
+        // Log for debugging (remove in production if too verbose)
+        console.log(`[CORS] Blocked origin: ${origin}, Allowed: ${JSON.stringify(allowedOrigins)}`);
         callback(new Error('Not allowed by CORS'));
       }
     } else {
