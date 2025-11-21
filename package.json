@@ -10,7 +10,7 @@
     "build": "cd client && npm run build && cd .. && rm -rf build && cp -r client/build .",
     "start": "node server.js",
     "install-all": "npm install && cd client && npm install",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build && cd .. && rm -rf build && cp -r client/build ."
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.9.0",

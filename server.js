@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 import generateRoute from './api/routes/generate.js';
 import generateContinuationRoute from './api/routes/generateContinuation.js';
 import generatePlusRoute from './api/routes/generate.plus.js';
@@ -103,8 +104,30 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Verify build directory exists before starting server
+const buildDir = path.join(__dirname, 'build');
+const indexPath = path.join(buildDir, 'index.html');
+
+if (!fs.existsSync(buildDir) || !fs.existsSync(indexPath)) {
+  console.error('ERROR: Build directory not found!');
+  console.error(`Expected build directory: ${buildDir}`);
+  console.error(`Expected index.html at: ${indexPath}`);
+  console.error('');
+  console.error('This usually means:');
+  console.error('1. The React build step failed during deployment');
+  console.error('2. Check Build Logs in DigitalOcean App Platform');
+  console.error('3. Ensure "npm run build" completes successfully');
+  console.error('');
+  console.error('Server will start but will return errors for frontend requests.');
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Build directory: ${path.join(__dirname, 'build')}`);
+  console.log(`Build directory: ${buildDir}`);
+  if (fs.existsSync(indexPath)) {
+    console.log('✓ Build directory found - frontend ready');
+  } else {
+    console.log('✗ Build directory missing - frontend will not work');
+  }
 });
