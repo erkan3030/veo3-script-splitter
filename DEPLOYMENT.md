@@ -104,6 +104,8 @@ If you haven't already set up Git for this project, follow these steps:
    git commit -m "Initial commit: UGC Script Splitter with DigitalOcean deployment config"
    ```
 
+   **Important**: Your code is now committed locally, but it's not on GitHub yet! Continue to the **"Push to GitHub/GitLab/Bitbucket"** section below to upload your code.
+
 ### Option B: Connect to Existing Remote Repository
 
 If you already have a Git repository initialized:
@@ -125,6 +127,8 @@ If you already have a Git repository initialized:
 
 ### Push to GitHub/GitLab/Bitbucket
 
+**This section applies to both Option A and Option B** - you need to push your commits to see them on GitHub.
+
 1. **Create a new repository** on GitHub/GitLab/Bitbucket:
    - Go to your Git hosting service
    - Click "New Repository" or "Create Repository"
@@ -132,25 +136,34 @@ If you already have a Git repository initialized:
    - **Don't** initialize with README, .gitignore, or license (if you already have these)
    - Copy the repository URL (e.g., `https://github.com/yourusername/ugc-script-splitter.git`)
 
-2. **Add remote repository** (if not already added):
-   ```bash
-   git remote add origin https://github.com/yourusername/ugc-script-splitter.git
-   ```
-   Replace with your actual repository URL.
-
-3. **Check remote**:
+2. **Check if remote already exists**:
    ```bash
    git remote -v
    ```
-   Should show your repository URL.
+   
+   **If you see a remote URL** (like `origin https://github.com/...`), skip to step 4.
+   
+   **If you see "no remotes"** or nothing, continue to step 3.
 
-4. **Push to remote**:
+3. **Add remote repository**:
+   ```bash
+   git remote add origin https://github.com/yourusername/ugc-script-splitter.git
+   ```
+   Replace `yourusername` and `ugc-script-splitter` with your actual GitHub username and repository name.
+   
+   **If you get "remote origin already exists" error**, you can either:
+   - Update it: `git remote set-url origin https://github.com/yourusername/ugc-script-splitter.git`
+   - Or skip to step 4 if the URL is correct
+
+4. **Push to remote** (this uploads your code to GitHub):
    ```bash
    git branch -M main
    git push -u origin main
    ```
    
-   If you get authentication errors:
+   This command uploads all your commits to GitHub. You should see your files appear on GitHub after this completes.
+   
+   **If you get authentication errors**:
    - **GitHub**: Use a Personal Access Token instead of password, or set up SSH keys
    - **GitLab**: Use a Personal Access Token or SSH keys
    - **Bitbucket**: Use an App Password or SSH keys
